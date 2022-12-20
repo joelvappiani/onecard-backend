@@ -4,8 +4,7 @@ const customSchema = mongoose.Schema({
     name : String,
     url : String,
     icon : String,
-    color : String,
-    switchOn: String
+    switchOn: Boolean
 })
 
 const settingSchema = mongoose.Schema({

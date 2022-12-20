@@ -98,12 +98,12 @@ router.put('/userSettings/switch', async(req, res)=> {
 //Add a new custom info 
 router.post('/customs', async(req, res)=> {
     try {
-        const { userId, name, url, icon, color } = req.body
+        const { switchOn, userId, name, url, icon } = req.body
         const user = await User.findById(userId)
         const settingsId = user.userSettings
         const settingsDocument = await Setting.findById(settingsId)
         const userCustoms = settingsDocument.customs
-        const newCustomArray = [...userCustoms, {name, url, icon, color}]
+        const newCustomArray = [...userCustoms, {switchOn, name, url, icon}]
         await Setting.findByIdAndUpdate(settingsId, {customs : newCustomArray})
         res.json({result: true})
     } catch(error) {
@@ -122,6 +122,36 @@ router.delete('/customs', async(req, res)=> {
         const userCustoms = settingsDocument.customs
         if (userId && url){
             const newCustomArray = userCustoms.filter((e)=> e.url !== url)
+            await Setting.findByIdAndUpdate(settingsId, {customs : newCustomArray})
+            res.json({result: true})
+        } else {
+            res.json({result: false, message: 'Missing information'})
+        }
+    } catch(error) {
+        console.log(error)
+        res.json({result: false, message: 'Error'})
+    }
+})
+
+//Switch a custom info 
+router.put('/customs', async(req, res)=> {
+    try {
+        const { userId, url, switchOn } = req.body
+        const user = await User.findById(userId)
+        const settingsId = user.userSettings
+        const settingsDocument = await Setting.findById(settingsId)
+        const userCustoms = settingsDocument.customs
+      
+        if (userId && url){
+            console.log(userCustoms)
+            const newCustomArray = userCustoms.map((e)=> {
+                if(e.url === url){
+                   return {_id: e._id, name: e.name, url: e.url, icon: e.icon, switchOn}
+                } else {
+                    return e
+                }
+            })
+            console.log(newCustomArray)
             await Setting.findByIdAndUpdate(settingsId, {customs : newCustomArray})
             res.json({result: true})
         } else {
