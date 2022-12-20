@@ -51,7 +51,7 @@ router.get('/qr/:qrId', async(req,res)=> {
         const { qrId } = req.params
         const qr = await Qr.findById(qrId)
        
-        const infosArr = qr.infos.split(' ')
+        const infosArr = qr.infos
 
         const userInfos = await User.findById(qr.userId).populate('userSettings')
         
@@ -69,7 +69,7 @@ router.get('/qr/:qrId', async(req,res)=> {
                         for (let custom of customs){
                             if (custom.switchOn){
                                 const {name, url, icon} = custom
-                                responseArr.push({[name]: url, icon})
+                                responseArr({[name]: url, icon})
                             }
                         }
                     }
