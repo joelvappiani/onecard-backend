@@ -1,13 +1,5 @@
 const mongoose = require('mongoose');
 
-<<<<<<< HEAD
-=======
-const locationSchema = mongoose.Schema({
-    lat: Number,
-    lon: Number
-})
-
->>>>>>> 582721d9f7d5f7370d606bcecf4e1de1556fe9b6
 
 const transactionSchema = mongoose.Schema({
   
