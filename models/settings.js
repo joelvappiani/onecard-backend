@@ -5,20 +5,31 @@ const customSchema = mongoose.Schema({
     url : String,
     icon : String,
     color : String,
+    switchOn: String
 })
 
 const settingSchema = mongoose.Schema({
-    phoneNumber : String,
-    address : String,
-    companyName : String,
-    website : String,
-    linkedin : String,
-    whatsApp : String,
-    twitter : String,
-    instagram : String,
-    facebook : String,
-    tiktok : String,
-    resume : String,
+    phoneNumber : {
+        value: String,
+        switchOn: Boolean
+    },
+    address : {
+        value: String,
+        switchOn: Boolean
+    },
+    companyName : {
+        value: String,
+        switchOn: Boolean
+    },
+    website : {
+        value: String,
+        switchOn: Boolean
+    },
+    linkedin : {
+        value: String,
+        switchOn: Boolean
+    },
+    
     customs : [customSchema]
 });
 
