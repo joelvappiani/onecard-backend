@@ -6,17 +6,26 @@ const Setting = require('../models/settings')
 const createUser = async (firstName, lastName, email, socialLogin, password ) => {
     
     const newUserSettings = new Setting({
-        phoneNumber: '',
-        address: '',
-        companyName: '',
-        website: '',
-        linkedin: '',
-        whatsapp: '',
-        tweeter: '',
-        instagram: '',
-        facebook: '',
-        tiktok: '',
-        resume: '',
+        phoneNumber: {
+          value: '',
+          switchOn: false
+        },
+        address: {
+          value: '',
+          switchOn: false
+        },
+        companyName: {
+          value: '',
+          switchOn: false
+        },
+        website: {
+          value: '',
+          switchOn: false
+        },
+        linkedin: {
+          value: '',
+          switchOn: false
+        },
         customs: []
       })
       await newUserSettings.save()
