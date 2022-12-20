@@ -50,14 +50,14 @@ router.get('/qr/:qrId', async(req,res)=> {
     try {
         const { qrId } = req.params
         const qr = await Qr.findById(qrId)
-        console.log(qr)
+       
         const infosArr = qr.infos.split(' ')
 
         const userInfos = await User.findById(qr.userId).populate('userSettings')
         console.log(userInfos)
-        const {firstName, lastName, email } = userInfos
+        const {firstName, lastName, email, photo, cover } = userInfos
         const settings = userInfos.userSettings
-        const responseArr = [{firstName}, {lastName}, {email}]
+        const responseArr = [{firstName}, {lastName}, {email}, {photo}, {cover}]
         console.log(settings)
         infosArr.forEach((e)=> {
             const data = settings[e]
@@ -70,6 +70,8 @@ router.get('/qr/:qrId', async(req,res)=> {
      res.json({result: false, message: 'Error'})
     }
 })
+
+
 
 // Update qr count
 router.get('/scanned/:qrId', async (req, res)=> {
@@ -101,7 +103,6 @@ router.put('/fav', async(req, res)=> {
     try {
         const { qrId, userId } = req.body
         const userQrs = await Qr.find({userId})
-        console.log(userQrs)
         if (userQrs.some(e=> e._id == qrId)){
             const qr = await Qr.findById(qrId)
             const fav = qr.isFav
