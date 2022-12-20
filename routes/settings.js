@@ -39,8 +39,9 @@ router.put('/required', async(req, res)=> {
     }
 })
 
+
 //Modifiy settings infos 
-router.put('/userSettings', async(req, res)=> {
+router.put('/userSettings/value', async(req, res)=> {
     try {
         const { userId, valueToUpdate, newValue } = req.body
         if (!userId || !valueToUpdate || !newValue){
@@ -50,10 +51,38 @@ router.put('/userSettings', async(req, res)=> {
         const user = await User.findById(userId)
         const settingsId = user.userSettings
         if(newValue){
-            await Setting.findByIdAndUpdate(settingsId, {[valueToUpdate]: newValue})
-        } else {
-            await Setting.findByIdAndUpdate(settingsId, {[valueToUpdate]: null})
+            const settings = await Setting.findById(settingsId)
+            const switchOn = settings[valueToUpdate].switchOn
+            await Setting.findByIdAndUpdate(settingsId, {[valueToUpdate]: {value: newValue, switchOn}})
+        
+        
+        res.json({
+            result: true,
+            message: 'User info updated successfully'
+        })
+    }
+    } catch(error) {
+        console.log(error)
+        res.json({result: false, message: 'Error'})
+    }
+})
+
+//Modify settings switch
+router.put('/userSettings/switch', async(req, res)=> {
+    try {
+        const { userId, valueToUpdate, newValue } = req.body
+        if (!userId || !valueToUpdate || !newValue){
+            res.json({result: false, message: 'Missing values'})
+            return
         }
+        const user = await User.findById(userId)
+        const settingsId = user.userSettings
+        if(newValue){
+            console.log(valueToUpdate)
+            const settings = await Setting.findById(settingsId)
+            const value = settings[valueToUpdate].value
+            await Setting.findByIdAndUpdate(settingsId, {[valueToUpdate]: {value, switchOn: newValue}})
+        } 
         res.json({
             result: true,
             message: 'User info updated successfully'
