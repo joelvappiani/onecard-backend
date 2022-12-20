@@ -137,6 +137,7 @@ router.delete('/customs', async(req, res)=> {
 router.put('/customs', async(req, res)=> {
     try {
         const { userId, url, switchOn } = req.body
+
         const user = await User.findById(userId)
         const settingsId = user.userSettings
         const settingsDocument = await Setting.findById(settingsId)
@@ -152,7 +153,7 @@ router.put('/customs', async(req, res)=> {
                 }
             })
             console.log(newCustomArray)
-            await Setting.findByIdAndUpdate(settingsId, {customs : newCustomArray})
+            // await Setting.findByIdAndUpdate(settingsId, {customs : newCustomArray})
             res.json({result: true})
         } else {
             res.json({result: false, message: 'Missing information'})

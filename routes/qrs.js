@@ -54,15 +54,28 @@ router.get('/qr/:qrId', async(req,res)=> {
         const infosArr = qr.infos.split(' ')
 
         const userInfos = await User.findById(qr.userId).populate('userSettings')
-        console.log(userInfos)
+        
         const {firstName, lastName, email, photo, cover } = userInfos
         const settings = userInfos.userSettings
+        const customs = settings.customs
         const responseArr = [{firstName}, {lastName}, {email}, {photo}, {cover}]
-        console.log(settings)
+        
         infosArr.forEach((e)=> {
-            const data = settings[e]
-            responseArr.push({[e]: data})
+                if (e === 'phoneNumber' || e === 'address' || e === 'companyName' || e === 'website' || e === 'linkedin' ){
+                    if (settings[e].switchOn){
+                        const data = settings[e].value
+                        responseArr.push({[e]: data})
+                    } else {
+                        for (let custom of customs){
+                            if (custom.switchOn){
+                                const {name, url, icon} = custom
+                                responseArr.push({[name]: url, icon})
+                            }
+                        }
+                    }
+                }
         })
+        console.log
         
         res.json({result: true, responseArr})
     } catch(error) {
