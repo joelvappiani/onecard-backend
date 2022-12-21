@@ -152,9 +152,9 @@ router.put('/customs', async(req, res)=> {
                     return e
                 }
             })
-            console.log(newCustomArray)
-            // await Setting.findByIdAndUpdate(settingsId, {customs : newCustomArray})
-            res.json({result: true})
+            
+            const customs = await Setting.findByIdAndUpdate(settingsId, {customs : newCustomArray})
+            res.json({result: true, customs})
         } else {
             res.json({result: false, message: 'Missing information'})
         }
