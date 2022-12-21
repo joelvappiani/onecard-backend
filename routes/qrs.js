@@ -131,7 +131,7 @@ router.put('/fav', async(req, res)=> {
         }
     } catch(error) {
      console.log(error)
-     res.json({result: false, message: 'Error'})
+     res.json({result: false, message: 'Error', userQrs})
     }
 })
 
