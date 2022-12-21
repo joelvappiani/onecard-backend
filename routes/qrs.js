@@ -23,7 +23,7 @@ router.post('/newQr', async(req, res)=> {
             isFav: false
         }).save()
         console.log(newQr)
-        res.json({result: true, message: 'New qr generated'})
+        res.json({result: true, message: 'New qr generated', newQr})
 
     } catch(error) {
      console.log(error)
@@ -62,7 +62,6 @@ router.get('/qr/:qrId', async(req,res)=> {
         
         infosArr.forEach((e)=> {
                 if (e === 'phoneNumber' || e === 'address' || e === 'companyName' || e === 'website' || e === 'linkedin' ){
-                    if (settings[e].switchOn){
                         const data = settings[e].value
                         responseArr.push({[e]: data})
                     } else {
@@ -73,7 +72,7 @@ router.get('/qr/:qrId', async(req,res)=> {
                             }
                         }
                     }
-                }
+                
         })
         console.log
         
