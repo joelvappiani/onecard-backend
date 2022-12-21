@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 require ('../models/connections');
 const Transaction = require('../models/transactions')
-
+const Qr = require('../models/qrs')
 //Add a contact to the list on the scan
 router.post('/', async (req, res)=> {
     try {
@@ -22,18 +22,24 @@ router.get('/:userId', async(req, res)=> {
         const { userId } = req.params
         const contacts = await Transaction.find({userId}).populate(
             {
-                path: 'userId',
-                model: 'users',
-                select: { 'firstName': 1,'lastName':1}
-            },   
-        ).populate(
-            {
                 path: 'qrId',
                 model: 'qrs',
                 select: { 'qrName': 1}
             }
         )
-        res.json({result: true, contacts})
+        const contactsQrIds = contacts.map((e)=> {
+            return e.qrId._id
+        })
+        const infos = []
+        for (let id of contactsQrIds){
+            const response = await Qr.findById(id).populate('userId')
+            const {firstName, lastName} = response.userId
+            infos.push({firstName, lastName})
+        }
+        const response = contacts.map((e, i)=> {
+            return {transaction: e, contactName: infos[i]}
+        })
+        res.json({result: true, response})
     } catch(error) {
      console.log(error)
      res.json({result: false, message: 'Error'})
