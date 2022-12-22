@@ -6,6 +6,18 @@ const fs = require('fs')
 const Setting = require('../models/settings')
 const User = require('../models/users')
 const uniqid = require('uniqid')
+const streamifier = require('streamifier')
+const multer = require('multer')
+
+
+cloudinary.config({
+    cloud_name: 'donexpiib',
+    api_key: '156348792415538',
+    api_secret: 'kNreRjRl8kG3xVOOV7thVvwb38A'
+})
+
+const upload = multer({ dest: 'upload/'})
+
 //Gather all the infos of the user sending his id
 router.get('/:userId', async(req, res)=> {
     try {
@@ -167,28 +179,39 @@ router.put('/customs', async(req, res)=> {
 })
 
 //Upload a cover image 
-router.post('/cover/:userId', async(req, res)=> {
+router.post('/cover/:userId', upload.single('image'), async(req, res)=> {
     try{
         const {userId} = req.params
     // const photoPath = `../tmp/${uniqid()}.jpg`
     // const resultMove = await req.files.photoFromFront.mv(photoPath)
-    const result = await req.files.photoFromFront
+    // const result = await req.files.photoFromFront
     // if (!resultMove){
-        
-        const resultCloudinary = await cloudinary.uploader.upload(result, {
-            resource_type: "auto",
-          })
+        const imageData = req.files.buffer
+        const imageStream = streamifier.createReadStream(imageData)
+
+        await cloudinary.uploader.upload_stream(
+            { ressource_type: 'image'},
+            (error, result)=> {
+                if (error){
+                    console.error(error)
+                    res.status(500).send(error)
+                } else {
+                    console.log(result)
+                    res.send(result)
+                }
+            }
+            ).end(imageStream)
 
         // fs.unlinkSync(photoPath)
         // await User.findByIdAndUpdate(userId, {cover: resultCloudinary.secure_url})
-        res.json({result: true, message: 'cover uploaded', resultCloudinary})
+        res.json({result: true, message: 'cover uploaded'})
    
     // } else {
     //     res.json({result: false, message: resultMove})
     // }
     
     } catch(error){
-        res.json({result: false, message: error})
+        res.json({result: false, message: 'message'})
     }
 })
 
