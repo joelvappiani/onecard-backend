@@ -20,7 +20,8 @@ router.post('/newQr', async(req, res)=> {
             infos,
             qrName,
             numScans: 0,
-            isFav: false
+            isFav: false,
+            isVisible: true
         }).save()
         console.log(newQr)
         res.json({result: true, message: 'New qr generated', newQr})
@@ -102,7 +103,7 @@ router.get('/scanned/:qrId', async (req, res)=> {
 router.delete('/', async(req, res)=> {
     try {
         const { qrId } = req.body
-        await Qr.findByIdAndRemove(qrId)
+        await Qr.findByIdAndUpdate(qrId, {isVisible: false})
         res.json({result: true, message: 'Qr deleted successfully'})
     } catch(error) {
      console.log(error)

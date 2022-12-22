@@ -6,6 +6,7 @@ const qrSchema = mongoose.Schema({
     isFav : Boolean,
     qrName : String,
     numScans : Number,
+    isVisible : Boolean
 });
 
 const Qr = mongoose.model('qrs', qrSchema);
