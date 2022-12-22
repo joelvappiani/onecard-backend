@@ -173,8 +173,8 @@ router.post('/cover/:userId', async(req, res)=> {
     // const resultCloudinary = await cloudinary.uploader.upload(photo)
 
     
-        await User.findByIdAndUpdate(userId, {cover: photo})
-        res.json({result: true, message: 'cover uploaded', url: resultCloudinary.secure_url})
+        //await User.findByIdAndUpdate(userId, {cover: photo})
+        res.json({result: true, message: 'cover uploaded', photo})
    
     } catch(error){
         res.json({result: false, message: error})
