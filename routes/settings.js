@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 require ('../models/connections');
 const cloudinary = require('cloudinary').v2;
+const fs = require('fs')
 const Setting = require('../models/settings')
 const User = require('../models/users')
-
+const uniqid = require('uniqid')
 //Gather all the infos of the user sending his id
 router.get('/:userId', async(req, res)=> {
     try {
@@ -169,14 +170,20 @@ router.put('/customs', async(req, res)=> {
 router.post('/cover/:userId', async(req, res)=> {
     try{
         const {userId} = req.params
-    //const photoPath = `../ProfileImages/${uniqid().jpg}`
-    const photo = await req.files.photoFromFront
-    const resultCloudinary = await cloudinary.uploader.upload(photo)
+    const photoPath = `../tmp/${uniqid()}.jpg`
+    const resultMove = await req.files.photoFromFront.mv(photoPath)
+    if (!resultMove){
+        
+        const resultCloudinary = await cloudinary.uploader.upload(photoPath)
 
-    
-        await User.findByIdAndUpdate(userId, {cover: photo})
+        fs.unlinkSync(photoPath)
+        await User.findByIdAndUpdate(userId, {cover: resultCloudinary.secure_url})
         res.json({result: true, message: 'cover uploaded', resultCloudinary})
    
+    } else {
+        res.json({result: false, message: resultMove})
+    }
+    
     } catch(error){
         res.json({result: false, message: error})
     }
@@ -185,14 +192,20 @@ router.post('/cover/:userId', async(req, res)=> {
 router.post('/photo/:userId', async(req, res)=> {
     try{
         const {userId} = req.params
-    //const photoPath = `../ProfileImages/${uniqid().jpg}`
-    const photo = await req.files.photoFromFront
-    const resultCloudinary = await cloudinary.uploader.upload(photo)
+    const photoPath = `../tmp/${uniqid()}.jpg`
+    const resultMove = await req.files.photoFromFront.mv(photoPath)
+    if (!resultMove){
+        
+        const resultCloudinary = await cloudinary.uploader.upload(photoPath)
 
-    
-        await User.findByIdAndUpdate(userId, {photo: photo})
+        fs.unlinkSync(photoPath)
+        await User.findByIdAndUpdate(userId, {photo: resultCloudinary.secure_url})
         res.json({result: true, message: 'photo uploaded', resultCloudinary})
    
+    } else {
+        res.json({result: false, message: resultMove})
+    }
+    
     } catch(error){
         res.json({result: false, message: error})
     }
