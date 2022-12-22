@@ -36,9 +36,9 @@ router.get('/:userId', async(req, res)=> {
         })
         const infos = []
         for (let id of contactsQrIds){
-            const response = await Qr.findById(id).populate('userId')
-            const {firstName, lastName} = response.userId
-            infos.push({firstName, lastName})
+            const response = await Qr.findById(id).populate('userId')    
+            const {firstName, lastName, photo} = response.userId
+            infos.push({firstName, lastName, photo})
         }
         const response = contacts.map((e, i)=> {
             return {transaction: e, contactName: infos[i]}
