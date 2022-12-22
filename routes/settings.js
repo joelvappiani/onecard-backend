@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-require ('../models/connections');
+// require ('../models/connections');
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs')
 const Setting = require('../models/settings')

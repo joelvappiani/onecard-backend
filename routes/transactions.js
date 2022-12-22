@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-require ('../models/connections');
+// require ('../models/connections');
 const Transaction = require('../models/transactions')
 const Qr = require('../models/qrs')
 //Add a contact to the list on the scan

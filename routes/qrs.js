@@ -1,7 +1,7 @@
 const express = require('express');
 const { findById } = require('../models/qrs');
 const router = express.Router();
-require ('../models/connections');
+// require ('../models/connections');
 const Qr = require('../models/qrs')
 const User = require('../models/users')
 
