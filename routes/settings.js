@@ -175,7 +175,9 @@ router.post('/cover/:userId', async(req, res)=> {
     const result = await req.files.photoFromFront
     // if (!resultMove){
         
-        const resultCloudinary = await cloudinary.uploader.upload(result)
+        const resultCloudinary = await cloudinary.uploader.upload(result, {
+            resource_type: "auto",
+          })
 
         // fs.unlinkSync(photoPath)
         // await User.findByIdAndUpdate(userId, {cover: resultCloudinary.secure_url})
