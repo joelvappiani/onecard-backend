@@ -170,11 +170,11 @@ router.post('/cover/:userId', async(req, res)=> {
         const {userId} = req.params
     //const photoPath = `../ProfileImages/${uniqid().jpg}`
     const photo = await req.files.photoFromFront
-    // const resultCloudinary = await cloudinary.uploader.upload(photo)
+    const resultCloudinary = await cloudinary.uploader.upload(photo)
 
     
-        //await User.findByIdAndUpdate(userId, {cover: photo})
-        res.json({result: true, message: 'cover uploaded', photo})
+        // await User.findByIdAndUpdate(userId, {cover: photo})
+        res.json({result: true, message: 'cover uploaded', resultCloudinary})
    
     } catch(error){
         res.json({result: false, message: error})
