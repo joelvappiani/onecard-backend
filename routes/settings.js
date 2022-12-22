@@ -10,10 +10,10 @@ router.get('/:userId', async(req, res)=> {
     try {
         const { userId } = req.params
         const foundUser = await User.findById(userId).populate('userSettings')
-        const { firstName, lastName, email, userSettings } = foundUser
+        const { firstName, lastName, email, photo, cover, userSettings } = foundUser
         res.json({
             result: true,
-            user: {firstName, lastName, email, userSettings}
+            user: {firstName, lastName, email, photo, cover, userSettings}
         })
     } catch(error) {
         console.log(error)
