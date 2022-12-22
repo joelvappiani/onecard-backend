@@ -170,19 +170,20 @@ router.put('/customs', async(req, res)=> {
 router.post('/cover/:userId', async(req, res)=> {
     try{
         const {userId} = req.params
-    const photoPath = `../tmp/${uniqid()}.jpg`
-    const resultMove = await req.files.photoFromFront.mv(photoPath)
-    if (!resultMove){
+    // const photoPath = `../tmp/${uniqid()}.jpg`
+    // const resultMove = await req.files.photoFromFront.mv(photoPath)
+    const result = await req.files.photoFromFront
+    // if (!resultMove){
         
-        const resultCloudinary = await cloudinary.uploader.upload(photoPath)
+        const resultCloudinary = await cloudinary.uploader.upload(result)
 
-        fs.unlinkSync(photoPath)
-        await User.findByIdAndUpdate(userId, {cover: resultCloudinary.secure_url})
+        // fs.unlinkSync(photoPath)
+        // await User.findByIdAndUpdate(userId, {cover: resultCloudinary.secure_url})
         res.json({result: true, message: 'cover uploaded', resultCloudinary})
    
-    } else {
-        res.json({result: false, message: resultMove})
-    }
+    // } else {
+    //     res.json({result: false, message: resultMove})
+    // }
     
     } catch(error){
         res.json({result: false, message: error})

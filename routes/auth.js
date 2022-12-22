@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-require('../models/connections');
+// require('../models/connections');
 const User = require('../models/users')
 const checkBody = require('../modules/checkBody');
 const createUser = require('../modules/createUser');
