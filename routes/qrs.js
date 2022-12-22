@@ -38,7 +38,11 @@ router.get('/user/:userId', async(req, res)=> {
     try {
         const { userId } = req.params
         const qrList = await Qr.find({userId})
-        res.json({result: true, qrList})
+        if (qrList){
+            res.json({result: true, qrList})
+        } else {
+            res.json({result: false, message: 'no qr yet'})
+        }
 
     } catch(error) {
      console.log(error)
