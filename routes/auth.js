@@ -113,29 +113,29 @@ router.post('/photo', async(req, res)=> {
   }
 })
 
-//Post profile photo
-router.post('/cover', async(req, res)=> {
-  try {
-      const { userId, coverUrl } = req.body
-      const user = await User.findByIdAndUpdate(userId, {cover: coverUrl})
-      res.json({result: true, message: 'User cover updated'})
-  } catch(error) {
-   console.log(error)
-   res.json({result: false, message: 'Error'})
-  }
-})
+// //Post profile photo
+// router.post('/cover', async(req, res)=> {
+//   try {
+//       const { userId, coverUrl } = req.body
+//       const user = await User.findByIdAndUpdate(userId, {cover: coverUrl})
+//       res.json({result: true, message: 'User cover updated'})
+//   } catch(error) {
+//    console.log(error)
+//    res.json({result: false, message: 'Error'})
+//   }
+// })
 
-//Post profile cover
-router.post('/cover', async(req, res)=> {
-  try {
-      const { userId } = req.body
-      const user = await Qr.findById(userId)
-      res.json({result: true, message: 'User found', user})
-  } catch(error) {
-   console.log(error)
-   res.json({result: false, message: 'Error'})
-  }
-})
+// //Post profile photo
+// router.post('/photo', async(req, res)=> {
+//   try {
+//       const { userId } = req.body
+//       const user = await Qr.findById(userId)
+//       res.json({result: true, message: 'User found', user})
+//   } catch(error) {
+//    console.log(error)
+//    res.json({result: false, message: 'Error'})
+//   }
+// })
 
 
 module.exports = router;

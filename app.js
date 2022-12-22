@@ -8,12 +8,14 @@ const authRouter = require('./routes/auth');
 const settingsRouter = require('./routes/settings');
 const qrsRouter = require('./routes/qrs')
 const transactionsRouter = require('./routes/transactions')
+const fileUpload = require('express-fileupload')
+
 
 const app = express();
 
 const cors = require('cors')
 
-
+app.use(fileUpload())
 app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());

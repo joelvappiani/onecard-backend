@@ -120,7 +120,7 @@ router.put('/fav', async(req, res)=> {
             const fav = qr.isFav
             if (fav){
                 await Qr.updateMany({userId}, { $set:{isFav: false}})
-                res.json({result: true, message: 'You have no fav qr anymore'})
+                res.json({result: true, message: 'You have no fav qr anymore', })
             } else {
                 await Qr.updateMany({userId}, { $set:{isFav: false}})
                 await Qr.findByIdAndUpdate(qrId, {isFav : true})
@@ -131,7 +131,7 @@ router.put('/fav', async(req, res)=> {
         }
     } catch(error) {
      console.log(error)
-     res.json({result: false, message: 'Error', userQrs})
+     res.json({result: false, message: 'Error'})
     }
 })
 

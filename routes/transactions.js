@@ -27,6 +27,10 @@ router.get('/:userId', async(req, res)=> {
                 select: { 'qrName': 1}
             }
         )
+        console.log(contacts)
+        if (!contacts){
+           return res.json({result: true, message: 'No contacts yet', contacts})
+        }
         const contactsQrIds = contacts.map((e)=> {
             return e.qrId._id
         })
