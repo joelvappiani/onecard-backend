@@ -3,7 +3,7 @@ const router = express.Router();
 require ('../models/connections');
 const Setting = require('../models/settings')
 const User = require('../models/users')
-const uniqid = require('uniqid')
+
 //Gather all the infos of the user sending his id
 router.get('/:userId', async(req, res)=> {
     try {
@@ -170,12 +170,12 @@ router.post('cover/:userId', async(req, res)=> {
         const {userId} = req.params
     //const photoPath = `../ProfileImages/${uniqid().jpg}`
     const result = await req.files.photoFromFront
-    const resultCloudinary = await cloudinary.uploader.upload(result)
+    // const resultCloudinary = await cloudinary.uploader.upload(result)
 
     
-        await User.findByIdAndUpdate(userId, {cover: resultCloudinary.secure_url})
-        res.json({result: true, message: 'cover uploaded', url: resultCloudinary.secure_url})
-   
+    //     await User.findByIdAndUpdate(userId, {cover: resultCloudinary.secure_url})
+    //     res.json({result: true, message: 'cover uploaded', url: resultCloudinary.secure_url})
+   res.json({result})
     } catch(error){
         res.json({result: false, message: error})
     }
