@@ -165,23 +165,23 @@ router.put('/customs', async(req, res)=> {
 })
 
 //Upload a cover image 
-router.post('cover/:userId', async(req, res)=> {
+router.post('/cover/:userId', async(req, res)=> {
     try{
         const {userId} = req.params
     //const photoPath = `../ProfileImages/${uniqid().jpg}`
     const result = await req.files.photoFromFront
-    // const resultCloudinary = await cloudinary.uploader.upload(result)
+    const resultCloudinary = await cloudinary.uploader.upload(result)
 
     
-    //     await User.findByIdAndUpdate(userId, {cover: resultCloudinary.secure_url})
-    //     res.json({result: true, message: 'cover uploaded', url: resultCloudinary.secure_url})
-   res.json({result})
+        await User.findByIdAndUpdate(userId, {cover: resultCloudinary.secure_url})
+        res.json({result: true, message: 'cover uploaded', url: resultCloudinary.secure_url})
+   
     } catch(error){
         res.json({result: false, message: error})
     }
 })
 
-router.post('photo/:userId', async(req, res)=> {
+router.post('/photo/:userId', async(req, res)=> {
     const {userId} = req.params
     //const photoPath = `../ProfileImages/${uniqid().jpg}`
     const result = await req.files.photoFromFront
