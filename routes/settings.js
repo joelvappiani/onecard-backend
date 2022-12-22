@@ -5,9 +5,8 @@ const cloudinary = require('cloudinary').v2;
 const fs = require('fs')
 const Setting = require('../models/settings')
 const User = require('../models/users')
-const uniqid = require('uniqid')
+// const uniqid = require('uniqid')
 const streamifier = require('streamifier')
-const multer = require('multer')
 
 
 cloudinary.config({
@@ -16,7 +15,6 @@ cloudinary.config({
     api_secret: 'kNreRjRl8kG3xVOOV7thVvwb38A'
 })
 
-const upload = multer({ dest: 'upload/'})
 
 //Gather all the infos of the user sending his id
 router.get('/:userId', async(req, res)=> {
@@ -179,37 +177,33 @@ router.put('/customs', async(req, res)=> {
 })
 
 //Upload a cover image 
-router.post('/cover/:userId', upload.single('image'), async(req, res)=> {
+router.post('/cover/:userId', async(req, res)=> {
     try{
         const {userId} = req.params
-    // const photoPath = `../tmp/${uniqid()}.jpg`
-    // const resultMove = await req.files.photoFromFront.mv(photoPath)
-    // const result = await req.files.photoFromFront
-    // if (!resultMove){
-        const imageData = req.files.buffer
-        const imageStream = streamifier.createReadStream(imageData)
 
-        await cloudinary.uploader.upload_stream(
-            { ressource_type: 'image'},
-            (error, result)=> {
-                if (error){
-                    console.error(error)
-                    res.status(500).send(error)
-                } else {
-                    console.log(result)
-                    res.send(result)
+        const imageData = [];
+
+        req.on('data', data => {
+          imageData.push(data);
+        });
+      
+        req.on('end', () => {
+            const imageBuffer = Buffer.concat(imageData);
+
+            cloudinary.uploader.upload_stream(
+                { resource_type: 'image' },
+                async (error, result) => {
+                    if (error) {
+                        console.error(error);
+                        res.status(500).send(error);
+                    } else {
+                        console.log(result);
+                        await User.findByIdAndUpdate(userId, {cover: result.secure_url})
+                        res.send(result);
+                    }
                 }
-            }
-            ).end(imageStream)
-
-        // fs.unlinkSync(photoPath)
-        // await User.findByIdAndUpdate(userId, {cover: resultCloudinary.secure_url})
-        res.json({result: true, message: 'cover uploaded'})
-   
-    // } else {
-    //     res.json({result: false, message: resultMove})
-    // }
-    
+            ).end(imageBuffer);
+        });
     } catch(error){
         res.json({result: false, message: 'message'})
     }
@@ -218,22 +212,32 @@ router.post('/cover/:userId', upload.single('image'), async(req, res)=> {
 router.post('/photo/:userId', async(req, res)=> {
     try{
         const {userId} = req.params
-    const photoPath = `../tmp/${uniqid()}.jpg`
-    const resultMove = await req.files.photoFromFront.mv(photoPath)
-    if (!resultMove){
-        
-        const resultCloudinary = await cloudinary.uploader.upload(photoPath)
 
-        fs.unlinkSync(photoPath)
-        await User.findByIdAndUpdate(userId, {photo: resultCloudinary.secure_url})
-        res.json({result: true, message: 'photo uploaded', resultCloudinary})
-   
-    } else {
-        res.json({result: false, message: resultMove})
-    }
-    
+        const imageData = [];
+
+        req.on('data', data => {
+          imageData.push(data);
+        });
+      
+        req.on('end', () => {
+            const imageBuffer = Buffer.concat(imageData);
+
+            cloudinary.uploader.upload_stream(
+                { resource_type: 'image' },
+                async (error, result) => {
+                    if (error) {
+                        console.error(error);
+                        res.status(500).send(error);
+                    } else {
+                        console.log(result);
+                        await User.findByIdAndUpdate(userId, {photo: result.secure_url})
+                        res.send(result);
+                    }
+                }
+            ).end(imageBuffer);
+        });
     } catch(error){
-        res.json({result: false, message: error})
+        res.json({result: false, message: 'message'})
     }
 })
 
