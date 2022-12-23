@@ -37,8 +37,13 @@ router.post('/newQr', async(req, res)=> {
 router.get('/user/:userId', async(req, res)=> {
     try {
         const { userId } = req.params
-        const qrList = await Qr.find({userId})
-        if (qrList){
+        const dataList = await Qr.find({userId})
+        if (dataList){
+            
+            const qrList = dataList.filter((e)=> {
+                return e.isVisible
+            })
+            console.log('filter--------', qrList)
             res.json({result: true, qrList})
         } else {
             res.json({result: false, message: 'no qr yet'})
