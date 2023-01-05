@@ -146,35 +146,35 @@ router.delete('/customs', async(req, res)=> {
 })
 
 //Switch a custom info 
-router.put('/customs', async(req, res)=> {
-    try {
-        const { userId, url, switchOn } = req.body
+// router.put('/customs', async(req, res)=> {
+//     try {
+//         const { userId, url, switchOn } = req.body
 
-        const user = await User.findById(userId)
-        const settingsId = user.userSettings
-        const settingsDocument = await Setting.findById(settingsId)
-        const userCustoms = settingsDocument.customs
+//         const user = await User.findById(userId)
+//         const settingsId = user.userSettings
+//         const settingsDocument = await Setting.findById(settingsId)
+//         const userCustoms = settingsDocument.customs
       
-        if (userId && url){
-            console.log(userCustoms)
-            const newCustomArray = userCustoms.map((e)=> {
-                if(e.url === url){
-                   return {_id: e._id, name: e.name, url: e.url, icon: e.icon, switchOn}
-                } else {
-                    return e
-                }
-            })
+//         if (userId && url){
+//             console.log(userCustoms)
+//             const newCustomArray = userCustoms.map((e)=> {
+//                 if(e.url === url){
+//                    return {_id: e._id, name: e.name, url: e.url, icon: e.icon, switchOn}
+//                 } else {
+//                     return e
+//                 }
+//             })
             
-            const customs = await Setting.findByIdAndUpdate(settingsId, {customs : newCustomArray})
-            res.json({result: true, customs})
-        } else {
-            res.json({result: false, message: 'Missing information'})
-        }
-    } catch(error) {
-        console.log(error)
-        res.json({result: false, message: 'Error'})
-    }
-})
+//             const customs = await Setting.findByIdAndUpdate(settingsId, {customs : newCustomArray})
+//             res.json({result: true, customs})
+//         } else {
+//             res.json({result: false, message: 'Missing information'})
+//         }
+//     } catch(error) {
+//         console.log(error)
+//         res.json({result: false, message: 'Error'})
+//     }
+// })
 
 //Upload a cover image 
 router.post('/cover/:userId', async(req, res)=> {
@@ -209,6 +209,7 @@ router.post('/cover/:userId', async(req, res)=> {
     }
 })
 
+//Upload a profile photo
 router.post('/photo/:userId', async(req, res)=> {
     try{
         const {userId} = req.params

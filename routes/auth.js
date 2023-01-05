@@ -102,16 +102,16 @@ router.post('/socialLogin', async (req, res) => {
 })
 
 //Post profile photo
-router.post('/photo', async(req, res)=> {
-  try {
-      const { userId, photoUrl } = req.body
-      const user = await User.findByIdAndUpdate(userId, {photo: photoUrl})
-      res.json({result: true, message: 'User photo updated'})
-  } catch(error) {
-   console.log(error)
-   res.json({result: false, message: 'Error'})
-  }
-})
+// router.post('/photo', async(req, res)=> {
+//   try {
+//       const { userId, photoUrl } = req.body
+//       const user = await User.findByIdAndUpdate(userId, {photo: photoUrl})
+//       res.json({result: true, message: 'User photo updated'})
+//   } catch(error) {
+//    console.log(error)
+//    res.json({result: false, message: 'Error'})
+//   }
+// })
 
 // //Post profile photo
 // router.post('/cover', async(req, res)=> {
